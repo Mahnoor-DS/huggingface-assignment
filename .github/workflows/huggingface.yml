@@ -23,9 +23,5 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Debug: Check Hugging Face Token
-      run: echo "Hugging Face Token used in CI/CD: ${{ secrets.HF_TOKEN }}"
-      # REMOVE this step after confirming the token works correctly, never print sensitive info
-
     - name: Deploy to Hugging Face Spaces
       run: huggingface-cli repo update MahnoorDS/mlopsdeployer --token ${{ secrets.HF_TOKEN }}
