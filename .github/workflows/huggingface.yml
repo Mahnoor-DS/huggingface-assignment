@@ -24,4 +24,4 @@ jobs:
         pip install -r requirements.txt
 
     - name: Deploy to Hugging Face Spaces
-      run: huggingface-cli repo update MahnoorDS/mlopsdeployer --token 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
+      run: huggingface-cli repo update MahnoorDS/mlopsdeployer --token ${{ secrets.HF_TOKEN }}
