@@ -26,12 +26,28 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    # Step 4: Push changes to the new Hugging Face Space
-    - name: Deploy to Hugging Face Space
+    # Step 4: Clone the Hugging Face Space (using Git)
+    - name: Clone Hugging Face Space
       env:
         HF_TOKEN: ${{ secrets.HF_TOKEN }}
       run: |
-        git lfs install
-        huggingface-cli repo create mlops-deployment-new --space-sdk gradio --token $HF_TOKEN || true
-        git remote add hf https://huggingface.co/spaces/<MahnoorDS>/mlops-deployment-new.git
-        git push hf main --force
+        git clone https://huggingface.co/spaces/MahnoorDS/mlops-deployment-new
+        cd mlops-deployment-new
+        git config --global user.email "your-email@example.com"
+        git config --global user.name "Your Name"
+    
+    # Step 5: Copy Files to Space
+    - name: Copy Files to Space
+      run: |
+        cp -r * mlops-deployment-new/
+        cd mlops-deployment-new
+
+    # Step 6: Push changes to the Hugging Face Space
+    - name: Push to Hugging Face Space
+      env:
+        HF_TOKEN: ${{ secrets.HF_TOKEN }}
+      run: |
+        cd mlops-deployment-new
+        git add .
+        git commit -m "Deploy to Hugging Face Space"
+        git push https://$HF_TOKEN@huggingface.co/spaces/MahnoorDS/mlops-deployment-new
