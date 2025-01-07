@@ -1,50 +1,26 @@
-name: Deploy to Hugging Face Spaces
+name: Sync to Hugging Face Hub
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
-  deploy:
+  sync-to-hub:
     runs-on: ubuntu-latest
-
     steps:
-      # Step 1: Checkout the repository
-    - name: Checkout code
-      uses: actions/checkout@v3
+      # Step 1: Checkout code
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
-      # Step 2: Set up Python
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.9'
+      # Step 2: Add remote
+      - name: Add remote
+        env:
+          HF: ${{ secrets.HF_TOKEN }}
+        run: git remote add space https://MahnoorDS:${{ secrets.HF_TOKEN }}@huggingface.co/spaces/MahnoorDS/mlops-deployment-new
 
-      # Step 3: Install dependencies
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-
-      # Step 4: Clone Hugging Face Space repository
-    - name: Clone Hugging Face Space
-      run: |
-        git clone https://huggingface.co/spaces/MahnoorDS/mlops-deployment-new
-        cd mlops-deployment-new
-        git config --global user.email "mahnoorshahid7899@gmail.com"  # Your Hugging Face email
-        git config --global user.name "MahnoorDS"  # Your Hugging Face username
-
-      # Step 5: Copy files to Hugging Face Space, excluding the directory itself
-    - name: Copy files to Hugging Face Space
-      run: |
-        rsync -av --exclude 'mlops-deployment-new' ./ mlops-deployment-new/
-
-      # Step 6: Commit and push to Hugging Face Space
-    - name: Commit and push to Hugging Face Space
-      run: |
-        cd mlops-deployment-new
-        git add .
-        git commit -m "Deploy to Hugging Face Space"
-        git push https://$HF_TOKEN@huggingface.co/spaces/MahnoorDS/mlops-deployment-new
-      env:
-        HF_TOKEN: ${{ secrets.HF_TOKEN }}
+      # Step 3: Push to Hugging Face Space
+      - name: Push to hub
+        env:
+          HF: ${{ secrets.HF_TOKEN }}
+        run: git push --force https://MahnoorDS:${{ secrets.HF_TOKEN }}@huggingface.co/spaces/MahnoorDS/mlops-deployment-new main
