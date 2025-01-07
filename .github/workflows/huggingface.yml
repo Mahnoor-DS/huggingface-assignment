@@ -13,10 +13,14 @@ jobs:
         with:
           fetch-depth: 0
 
-      # Step 2: Add remote with token directly (for debugging)
+      # Step 2: Add remote with secret token
       - name: Add remote
-        run: git remote add space https://MahnoorDS:<your-huggingface-token>@huggingface.co/spaces/MahnoorDS/mlops-deployment-new
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: git remote add space https://MahnoorDS:${{ secrets.HF_TOKEN }}@huggingface.co/spaces/MahnoorDS/mlops-deployment-new
 
-      # Step 3: Push to Hugging Face Space
+      # Step 3: Push to hub
       - name: Push to hub
-        run: git push --force https://MahnoorDS:<your-huggingface-token>@huggingface.co/spaces/MahnoorDS/mlops-deployment-new main
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: git push --force https://MahnoorDS:${{ secrets.HF_TOKEN }}@huggingface.co/spaces/MahnoorDS/mlops-deployment-new main
