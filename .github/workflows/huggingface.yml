@@ -15,7 +15,6 @@ jobs:
       uses: actions/checkout@v3
 
     # Step 2: Set up Python
-    - name: Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: '3.9'
@@ -35,14 +34,14 @@ jobs:
         cd mlops-deployment-new
         git config --global user.email "your-email@example.com"
         git config --global user.name "Your Name"
-    
-    # Step 5: Copy Files to Space (exclude the Space directory itself)
-    - name: Copy Files to Space
+
+    # Step 5: Copy files to the cloned Hugging Face Space, excluding itself
+    - name: Copy files to Hugging Face Space
       run: |
-        cp -r ./* mlops-deployment-new/  # Copy everything except the mlops-deployment-new directory itself
+        rsync -av --exclude 'mlops-deployment-new' ./ mlops-deployment-new/
         cd mlops-deployment-new
 
-    # Step 6: Push changes to the Hugging Face Space
+    # Step 6: Push changes to Hugging Face Space
     - name: Push to Hugging Face Space
       env:
         HF_TOKEN: ${{ secrets.HF_TOKEN }}
