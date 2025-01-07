@@ -31,15 +31,15 @@ jobs:
       run: |
         git clone https://huggingface.co/spaces/MahnoorDS/mlops-deployment-new
         cd mlops-deployment-new
-        git config --global user.email "your-email@example.com"
-        git config --global user.name "Your Name"
+        git config --global user.email "mahnoorshahid7899@gmail.com"  # Your Hugging Face email
+        git config --global user.name "MahnoorDS"  # Your Hugging Face username
 
-      # Step 5: Copy files to Hugging Face Space, excluding itself
+      # Step 5: Copy files to Hugging Face Space, excluding the directory itself
     - name: Copy files to Hugging Face Space
       run: |
         rsync -av --exclude 'mlops-deployment-new' ./ mlops-deployment-new/
 
-      # Step 6: Push changes to Hugging Face Space
+      # Step 6: Commit and push to Hugging Face Space
     - name: Commit and push to Hugging Face Space
       run: |
         cd mlops-deployment-new
