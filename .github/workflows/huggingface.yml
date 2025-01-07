@@ -36,10 +36,10 @@ jobs:
         git config --global user.email "your-email@example.com"
         git config --global user.name "Your Name"
     
-    # Step 5: Copy Files to Space
+    # Step 5: Copy Files to Space (exclude the Space directory itself)
     - name: Copy Files to Space
       run: |
-        cp -r * mlops-deployment-new/
+        cp -r ./* mlops-deployment-new/  # Copy everything except the mlops-deployment-new directory itself
         cd mlops-deployment-new
 
     # Step 6: Push changes to the Hugging Face Space
